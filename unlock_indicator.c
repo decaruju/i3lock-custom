@@ -21,7 +21,7 @@
 #include "unlock_indicator.h"
 #include "xinerama.h"
 
-#define BUTTON_RADIUS 90
+#define BUTTON_RADIUS 30
 #define BUTTON_SPACE (BUTTON_RADIUS + 5)
 #define BUTTON_CENTER (BUTTON_RADIUS + 5)
 #define BUTTON_DIAMETER (2 * BUTTON_SPACE)
