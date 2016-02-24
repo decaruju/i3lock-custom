@@ -21,11 +21,6 @@
 #include "unlock_indicator.h"
 #include "xinerama.h"
 
-#define BUTTON_RADIUS 90
-#define BUTTON_SPACE (BUTTON_RADIUS + 5)
-#define BUTTON_CENTER (BUTTON_RADIUS + 5)
-#define BUTTON_DIAMETER (2 * BUTTON_SPACE)
-
 /*******************************************************************************
  * Variables defined in i3lock.c.
  ******************************************************************************/
@@ -44,6 +39,12 @@ extern uint32_t last_resolution[2];
 
 /* Whether the unlock indicator is enabled (defaults to true). */
 extern bool unlock_indicator;
+
+/* Dimentions of the unlock indicator (default = 90) */
+extern int indicator_radius;
+extern int indicator_space;
+extern int indicator_center;
+extern int indicator_diameter;
 
 /* List of pressed modifiers, or NULL if none are pressed. */
 extern char *modifier_string;
@@ -98,9 +99,9 @@ static double scaling_factor(void) {
  */
 xcb_pixmap_t draw_image(uint32_t *resolution) {
     xcb_pixmap_t bg_pixmap = XCB_NONE;
-    int button_diameter_physical = ceil(scaling_factor() * BUTTON_DIAMETER);
+    int indicator_diameter_physical = ceil(scaling_factor() * indicator_diameter);
     DEBUG("scaling_factor is %.f, physical diameter is %d px\n",
-          scaling_factor(), button_diameter_physical);
+          scaling_factor(), indicator_diameter_physical);
 
     if (!vistype)
         vistype = get_root_visual_type(screen);
@@ -108,7 +109,7 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
     /* Initialize cairo: Create one in-memory surface to render the unlock
      * indicator on, create one XCB surface to actually draw (one or more,
      * depending on the amount of screens) unlock indicators on. */
-    cairo_surface_t *output = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, button_diameter_physical, button_diameter_physical);
+    cairo_surface_t *output = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, indicator_diameter_physical, indicator_diameter_physical);
     cairo_t *ctx = cairo_create(output);
 
     cairo_surface_t *xcb_output = cairo_xcb_surface_create(conn, bg_pixmap, vistype, resolution[0], resolution[1]);
@@ -146,9 +147,9 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
         /* Draw a (centered) circle with transparent background. */
         cairo_set_line_width(ctx, 10.0);
         cairo_arc(ctx,
-                  BUTTON_CENTER /* x */,
-                  BUTTON_CENTER /* y */,
-                  BUTTON_RADIUS /* radius */,
+                  indicator_center /* x */,
+                  indicator_center /* y */,
+                  indicator_radius /* radius */,
                   0 /* start */,
                   2 * M_PI /* end */);
 
@@ -184,9 +185,9 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
         cairo_set_source_rgb(ctx, 0, 0, 0);
         cairo_set_line_width(ctx, 2.0);
         cairo_arc(ctx,
-                  BUTTON_CENTER /* x */,
-                  BUTTON_CENTER /* y */,
-                  BUTTON_RADIUS - 5 /* radius */,
+                  indicator_center /* x */,
+                  indicator_center /* y */,
+                  indicator_radius - 5 /* radius */,
                   0,
                   2 * M_PI);
         cairo_stroke(ctx);
@@ -226,8 +227,8 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
             double x, y;
 
             cairo_text_extents(ctx, text, &extents);
-            x = BUTTON_CENTER - ((extents.width / 2) + extents.x_bearing);
-            y = BUTTON_CENTER - ((extents.height / 2) + extents.y_bearing);
+            x = indicator_center - ((extents.width / 2) + extents.x_bearing);
+            y = indicator_center - ((extents.height / 2) + extents.y_bearing);
 
             cairo_move_to(ctx, x, y);
             cairo_show_text(ctx, text);
@@ -241,8 +242,8 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
             cairo_set_font_size(ctx, 14.0);
 
             cairo_text_extents(ctx, modifier_string, &extents);
-            x = BUTTON_CENTER - ((extents.width / 2) + extents.x_bearing);
-            y = BUTTON_CENTER - ((extents.height / 2) + extents.y_bearing) + 28.0;
+            x = indicator_center - ((extents.width / 2) + extents.x_bearing);
+            y = indicator_center - ((extents.height / 2) + extents.y_bearing) + 28.0;
 
             cairo_move_to(ctx, x, y);
             cairo_show_text(ctx, modifier_string);
@@ -257,9 +258,9 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
             cairo_new_sub_path(ctx);
             double highlight_start = (rand() % (int)(2 * M_PI * 100)) / 100.0;
             cairo_arc(ctx,
-                      BUTTON_CENTER /* x */,
-                      BUTTON_CENTER /* y */,
-                      BUTTON_RADIUS /* radius */,
+                      indicator_center /* x */,
+                      indicator_center /* y */,
+                      indicator_radius /* radius */,
                       highlight_start,
                       highlight_start + (M_PI / 3.0));
             if (unlock_state == STATE_KEY_ACTIVE) {
@@ -275,16 +276,16 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
              * unlock indicator. */
             cairo_set_source_rgb(ctx, 0, 0, 0);
             cairo_arc(ctx,
-                      BUTTON_CENTER /* x */,
-                      BUTTON_CENTER /* y */,
-                      BUTTON_RADIUS /* radius */,
+                      indicator_center /* x */,
+                      indicator_center /* y */,
+                      indicator_radius /* radius */,
                       highlight_start /* start */,
                       highlight_start + (M_PI / 128.0) /* end */);
             cairo_stroke(ctx);
             cairo_arc(ctx,
-                      BUTTON_CENTER /* x */,
-                      BUTTON_CENTER /* y */,
-                      BUTTON_RADIUS /* radius */,
+                      indicator_center /* x */,
+                      indicator_center /* y */,
+                      indicator_radius /* radius */,
                       highlight_start + (M_PI / 3.0) /* start */,
                       (highlight_start + (M_PI / 3.0)) + (M_PI / 128.0) /* end */);
             cairo_stroke(ctx);
@@ -294,20 +295,20 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
     if (xr_screens > 0) {
         /* Composite the unlock indicator in the middle of each screen. */
         for (int screen = 0; screen < xr_screens; screen++) {
-            int x = (xr_resolutions[screen].x + ((xr_resolutions[screen].width / 2) - (button_diameter_physical / 2)));
-            int y = (xr_resolutions[screen].y + ((xr_resolutions[screen].height / 2) - (button_diameter_physical / 2)));
+            int x = (xr_resolutions[screen].x + ((xr_resolutions[screen].width / 2) - (indicator_diameter_physical / 2)));
+            int y = (xr_resolutions[screen].y + ((xr_resolutions[screen].height / 2) - (indicator_diameter_physical / 2)));
             cairo_set_source_surface(xcb_ctx, output, x, y);
-            cairo_rectangle(xcb_ctx, x, y, button_diameter_physical, button_diameter_physical);
+            cairo_rectangle(xcb_ctx, x, y, indicator_diameter_physical, indicator_diameter_physical);
             cairo_fill(xcb_ctx);
         }
     } else {
         /* We have no information about the screen sizes/positions, so we just
          * place the unlock indicator in the middle of the X root window and
          * hope for the best. */
-        int x = (last_resolution[0] / 2) - (button_diameter_physical / 2);
-        int y = (last_resolution[1] / 2) - (button_diameter_physical / 2);
+        int x = (last_resolution[0] / 2) - (indicator_diameter_physical / 2);
+        int y = (last_resolution[1] / 2) - (indicator_diameter_physical / 2);
         cairo_set_source_surface(xcb_ctx, output, x, y);
-        cairo_rectangle(xcb_ctx, x, y, button_diameter_physical, button_diameter_physical);
+        cairo_rectangle(xcb_ctx, x, y, indicator_diameter_physical, indicator_diameter_physical);
         cairo_fill(xcb_ctx);
     }
 
