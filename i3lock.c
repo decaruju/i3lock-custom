@@ -848,7 +848,7 @@ int main(int argc, char *argv[]) {
     /* update dimentions */
     indicator_space = indicator_radius + 5;
     indicator_center = indicator_radius + 5;
-    indicator_diameter = 2 * indicator_radius;
+    indicator_diameter = 2 * indicator_space;
 
     /* We need (relatively) random numbers for highlighting a random part of
      * the unlock indicator upon keypresses. */

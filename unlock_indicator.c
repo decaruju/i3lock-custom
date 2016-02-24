@@ -115,11 +115,6 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
     cairo_surface_t *xcb_output = cairo_xcb_surface_create(conn, bg_pixmap, vistype, resolution[0], resolution[1]);
     cairo_t *xcb_ctx = cairo_create(xcb_output);
 
-    /* update dimentions */
-    indicator_space = indicator_radius + 5;
-    indicator_center = indicator_radius + 5;
-    indicator_diameter = 2 * indicator_radius;
-
     if (img) {
         if (!tile) {
             cairo_set_source_surface(xcb_ctx, img, 0, 0);
