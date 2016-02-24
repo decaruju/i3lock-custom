@@ -49,6 +49,9 @@ extern int indicator_diameter;
 /* option for hiding text */
 extern bool hide_text;
 
+/* indicator background opacity */
+extern float ind_opacity;
+
 /* List of pressed modifiers, or NULL if none are pressed. */
 extern char *modifier_string;
 
@@ -160,13 +163,13 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
          * (currently verifying, wrong password, or default) */
         switch (pam_state) {
             case STATE_PAM_VERIFY:
-                cairo_set_source_rgba(ctx, 0, 114.0 / 255, 255.0 / 255, 0);
+                cairo_set_source_rgba(ctx, 0, 114.0 / 255, 255.0 / 255, ind_opacity);
                 break;
             case STATE_PAM_WRONG:
-                cairo_set_source_rgba(ctx, 250.0 / 255, 0, 0, 0);
+                cairo_set_source_rgba(ctx, 250.0 / 255, 0, 0, ind_opacity);
                 break;
             default:
-                cairo_set_source_rgba(ctx, 0, 0, 0, 0);
+                cairo_set_source_rgba(ctx, 0, 0, 0, ind_opacity);
                 break;
         }
         cairo_fill_preserve(ctx);

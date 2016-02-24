@@ -66,6 +66,9 @@ int indicator_diameter;
 /* option for not showing text (default = false) */
 bool hide_text = false;
 
+/* opacity of indicator background (default = 0.75) */
+float ind_opacity = 0.75;
+
 char *modifier_string = NULL;
 static bool dont_fork = false;
 struct ev_loop *main_loop;
@@ -770,6 +773,7 @@ int main(int argc, char *argv[]) {
         {"inactivity-timeout", required_argument, NULL, 'I'},
         {"show-failed-attempts", no_argument, NULL, 'f'},
         {"indicator-radius", required_argument, NULL, 'r'},
+        {"indicator-opacity", required_argument, NULL, 'o'},
         {"indicator-hide-text", no_argument, NULL, 'x'},
         {NULL, no_argument, NULL, 0}};
 
@@ -778,7 +782,7 @@ int main(int argc, char *argv[]) {
     if ((username = pw->pw_name) == NULL)
         errx(EXIT_FAILURE, "pw->pw_name is NULL.\n");
 
-    char *optstring = "hvnbdc:p:ui:teI:fr:x";
+    char *optstring = "hvnbdc:p:ui:teI:fr:o:x";
     while ((o = getopt_long(argc, argv, optstring, longopts, &optind)) != -1) {
         switch (o) {
             case 'v':
@@ -843,12 +847,16 @@ int main(int argc, char *argv[]) {
                 if (sscanf(optarg, "%d", &indicator_radius) != 1 || indicator_radius < 0)
                     errx(EXIT_FAILURE, "invalid radius, it must be a positive integer\n");
                 break;
+            case 'o':
+            if (sscanf(optarg, "%f", &ind_opacity) != 1 || ind_opacity < 0 || ind_opacity > 1)
+                errx(EXIT_FAILURE, "invalid opacity, it must be a decimal between 0 and 1\n");
+                break;
             case 'x':
                 hide_text = true;
                 break;
             default:
                 errx(EXIT_FAILURE, "Syntax: i3lock [-v] [-n] [-b] [-d] [-c color] [-u] [-p win|default]"
-                                   " [-i image.png] [-t] [-e] [-I timeout] [-f] [-r radius] [-x]");
+                                   " [-i image.png] [-t] [-e] [-I timeout] [-f] [-r radius] [-o opacity] [-x]");
         }
     }
 
