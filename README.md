@@ -5,7 +5,7 @@ Forked version of i3lock.
 
 Adds options to:
 - Set indicator radius [-r radius].
-- Hideindicator text [-x].
+- Hide indicator text [-x].
 - Set indicator background opacity [-o opacity].
 
 Upstream
