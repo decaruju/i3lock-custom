@@ -58,10 +58,10 @@ bool debug_mode = false;
 bool unlock_indicator = true;
 
 /* Dimentions of the unlock indicator (default = 90) */
-int indicator_radius = 90;
-int indicator_space;
-int indicator_center;
-int indicator_diameter;
+volatile int indicator_radius = 90;
+volatile int indicator_space;
+volatile int indicator_center;
+volatile int indicator_diameter;
 
 char *modifier_string = NULL;
 static bool dont_fork = false;

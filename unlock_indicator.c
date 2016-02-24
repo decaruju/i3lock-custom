@@ -41,10 +41,10 @@ extern uint32_t last_resolution[2];
 extern bool unlock_indicator;
 
 /* Dimentions of the unlock indicator (default = 90) */
-extern int indicator_radius;
-extern int indicator_space;
-extern int indicator_center;
-extern int indicator_diameter;
+extern volatile int indicator_radius;
+extern volatile int indicator_space;
+extern volatile int indicator_center;
+extern volatile int indicator_diameter;
 
 /* List of pressed modifiers, or NULL if none are pressed. */
 extern char *modifier_string;
