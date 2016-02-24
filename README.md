@@ -1,8 +1,18 @@
 i3lock-custom
 ===============================
 
-Modified version of i3lock.
+Forked version of i3lock.
+
+Adds options to:
+- Set indicator radius [-r radius].
+- Hideindicator text [-x].
+- Set indicator background opacity [-o opacity].
 
 Upstream
 --------
-Please submit pull requests to https://github.com/i3/i3lock
+https://github.com/i3/i3lock
+
+Changelog:
+---------
+
+24 Feb 2016 - Initial release.
