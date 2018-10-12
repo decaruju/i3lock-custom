@@ -1,3 +1,13 @@
+i3lock-custom-nord
+===============================
+Forked verstion of i3lock-custom
+
+Changes:
+- Color theme is now Nord inspired
+- Changes text to "Checking", and "Denied"
+- Flatened the indicator
+- Added 1 second delay if login is successful
+
 i3lock-custom
 ===============================
 
