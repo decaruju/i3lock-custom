@@ -258,6 +258,7 @@ static void input_done(void) {
          * refresh of the credentials failed. */
         pam_setcred(pam_handle, PAM_REFRESH_CRED);
         pam_end(pam_handle, PAM_SUCCESS);
+        sleep(1);
 
         exit(0);
     }
@@ -848,8 +849,8 @@ int main(int argc, char *argv[]) {
                     errx(EXIT_FAILURE, "invalid radius, it must be a positive integer\n");
                 break;
             case 'o':
-            if (sscanf(optarg, "%f", &ind_opacity) != 1 || ind_opacity < 0 || ind_opacity > 1)
-                errx(EXIT_FAILURE, "invalid opacity, it must be a decimal between 0 and 1\n");
+                if (sscanf(optarg, "%f", &ind_opacity) != 1 || ind_opacity < 0 || ind_opacity > 1)
+                    errx(EXIT_FAILURE, "invalid opacity, it must be a decimal between 0 and 1\n");
                 break;
             case 'x':
                 hide_text = true;
@@ -861,8 +862,8 @@ int main(int argc, char *argv[]) {
     }
 
     /* update dimentions */
-    indicator_space = indicator_radius + 5;
-    indicator_center = indicator_radius + 5;
+    indicator_space = indicator_radius + 50;
+    indicator_center = indicator_radius + 50;
     indicator_diameter = 2 * indicator_space;
 
     /* We need (relatively) random numbers for highlighting a random part of

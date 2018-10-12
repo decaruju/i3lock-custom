@@ -163,40 +163,40 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
          * (currently verifying, wrong password, or default) */
         switch (pam_state) {
             case STATE_PAM_VERIFY:
-                cairo_set_source_rgba(ctx, 0, 114.0 / 255, 255.0 / 255, ind_opacity);
+                cairo_set_source_rgba(ctx, 94.0 / 255, 129.0 / 255, 172.0 / 255, ind_opacity);
                 break;
             case STATE_PAM_WRONG:
-                cairo_set_source_rgba(ctx, 250.0 / 255, 0, 0, ind_opacity);
+                cairo_set_source_rgba(ctx, 191.0 / 255, 97.0 / 255, 106.0 / 255, ind_opacity);
                 break;
             default:
-                cairo_set_source_rgba(ctx, 0, 0, 0, ind_opacity);
+                cairo_set_source_rgba(ctx, 46.0 / 255, 52.0 / 255, 64.0 / 255, ind_opacity);
                 break;
         }
         cairo_fill_preserve(ctx);
 
         switch (pam_state) {
             case STATE_PAM_VERIFY:
-                cairo_set_source_rgb(ctx, 51.0 / 255, 0, 250.0 / 255);
+                cairo_set_source_rgb(ctx, 94.0 / 255, 129.0 / 255, 172.0 / 255);
                 break;
             case STATE_PAM_WRONG:
-                cairo_set_source_rgb(ctx, 125.0 / 255, 51.0 / 255, 0);
+                cairo_set_source_rgb(ctx, 191.0 / 255, 97.0 / 255, 106.0 / 255);
                 break;
-            case STATE_PAM_IDLE:
-                cairo_set_source_rgb(ctx, 51.0 / 255, 125.0 / 255, 0);
+            default:
+                cairo_set_source_rgb(ctx, 46.0 / 255, 52.0 / 255, 64.0 / 255);
                 break;
         }
         cairo_stroke(ctx);
 
         /* Draw an inner seperator line. */
-        cairo_set_source_rgb(ctx, 0, 0, 0);
-        cairo_set_line_width(ctx, 2.0);
-        cairo_arc(ctx,
-                  indicator_center /* x */,
-                  indicator_center /* y */,
-                  indicator_radius - 5 /* radius */,
-                  0,
-                  2 * M_PI);
-        cairo_stroke(ctx);
+        //cairo_set_source_rgb(ctx, 0, 0, 0);
+        //cairo_set_line_width(ctx, 2.0);
+        //cairo_arc(ctx,
+        //          indicator_center /* x */,
+        //          indicator_center /* y */,
+        //          indicator_radius - 5 /* radius */,
+        //          0,
+        //          2 * M_PI);
+        //cairo_stroke(ctx);
 
         cairo_set_line_width(ctx, 10.0);
 
@@ -211,10 +211,10 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
             cairo_set_font_size(ctx, 28.0);
             switch (pam_state) {
                 case STATE_PAM_VERIFY:
-                    text = "verifying…";
+                    text = "Checking";
                     break;
                 case STATE_PAM_WRONG:
-                    text = "wrong!";
+                    text = "Denied";
                     break;
                 default:
                     if (show_failed_attempts && failed_attempts > 0) {
@@ -274,29 +274,11 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
                       highlight_start + (M_PI / 3.0));
             if (unlock_state == STATE_KEY_ACTIVE) {
                 /* For normal keys, we use a lighter green. */
-                cairo_set_source_rgb(ctx, 51.0 / 255, 219.0 / 255, 0);
+                cairo_set_source_rgb(ctx, 163.0 / 255, 190.0 / 255, 140.0 / 255);
             } else {
                 /* For backspace, we use red. */
-                cairo_set_source_rgb(ctx, 219.0 / 255, 51.0 / 255, 0);
+                cairo_set_source_rgb(ctx, 191.0 / 255, 97.0 / 255, 106.0 / 255);
             }
-            cairo_stroke(ctx);
-
-            /* Draw two little separators for the highlighted part of the
-             * unlock indicator. */
-            cairo_set_source_rgb(ctx, 0, 0, 0);
-            cairo_arc(ctx,
-                      indicator_center /* x */,
-                      indicator_center /* y */,
-                      indicator_radius /* radius */,
-                      highlight_start /* start */,
-                      highlight_start + (M_PI / 128.0) /* end */);
-            cairo_stroke(ctx);
-            cairo_arc(ctx,
-                      indicator_center /* x */,
-                      indicator_center /* y */,
-                      indicator_radius /* radius */,
-                      highlight_start + (M_PI / 3.0) /* start */,
-                      (highlight_start + (M_PI / 3.0)) + (M_PI / 128.0) /* end */);
             cairo_stroke(ctx);
         }
     }
