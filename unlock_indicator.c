@@ -151,7 +151,7 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
         (unlock_state >= STATE_KEY_PRESSED || pam_state > STATE_PAM_IDLE)) {
         cairo_scale(ctx, scaling_factor(), scaling_factor());
         /* Draw a (centered) circle with transparent background. */
-        cairo_set_line_width(ctx, 10.0);
+        cairo_set_line_width(ctx, 50.0);
         cairo_arc(ctx,
                   indicator_center /* x */,
                   indicator_center /* y */,
@@ -169,7 +169,7 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
                 cairo_set_source_rgba(ctx, 191.0 / 255, 97.0 / 255, 106.0 / 255, ind_opacity);
                 break;
             default:
-                cairo_set_source_rgba(ctx, 46.0 / 255, 52.0 / 255, 64.0 / 255, ind_opacity);
+                cairo_set_source_rgba(ctx, 76.0 / 255, 86.0 / 255, 106.0 / 255, ind_opacity);
                 break;
         }
         cairo_fill_preserve(ctx);
@@ -198,7 +198,7 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
         //          2 * M_PI);
         //cairo_stroke(ctx);
 
-        cairo_set_line_width(ctx, 10.0);
+        cairo_set_line_width(ctx, 50.0);
 
         if(!hide_text)
         {
